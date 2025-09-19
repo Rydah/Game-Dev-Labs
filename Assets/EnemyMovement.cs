@@ -66,8 +66,9 @@ public class EnemyMovement : MonoBehaviour
                 }
                 else
                 {
-                    // Player got hit from the side/below
-                    Debug.Log("Player takes damage!");
+                    GameManager.Instance.ShowGameOverScreen();
+                    Debug.Log("YOU DIED");
+                    break;
                 }
             }
         }
