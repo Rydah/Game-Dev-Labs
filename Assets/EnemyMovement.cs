@@ -45,8 +45,31 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log(other.gameObject.name);
+        if (col.gameObject.CompareTag("Player"))
+        {
+            foreach (ContactPoint2D contact in col.contacts)
+            {
+                // Player landed from above
+                if (contact.normal.y < -0.5f)
+                {
+                    GameManager.Instance.AddScore(100);
+
+                    // Make player bounce
+                    float bounceForce = 10f;
+                    Rigidbody2D rb = col.gameObject.GetComponent<Rigidbody2D>();
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce); // adjust bounce
+
+                    Destroy(gameObject); // enemy dies
+                    break;
+                }
+                else
+                {
+                    // Player got hit from the side/below
+                    Debug.Log("Player takes damage!");
+                }
+            }
+        }
     }
 }
