@@ -54,7 +54,13 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyUp("a") || Input.GetKeyUp("d"))
         {
             // stop
-            marioBody.linearVelocity = Vector2.zero;
+            if (Input.GetKeyUp("a") || Input.GetKeyUp("d"))
+            {
+                var v = marioBody.linearVelocity;
+                v.x = 0;
+                marioBody.linearVelocity = v;
+            }
+
         }
 
         if (Input.GetKeyDown("space") && onGroundState)
@@ -77,6 +83,14 @@ public class PlayerMovement : MonoBehaviour
                     onGroundState = true;
                 }
             }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Collided with goomba!");
         }
     }
 }
