@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public float maxSpeed = 20;
     public float upSpeed = 10;
     private bool onGroundState = true;
+    private SpriteRenderer marioSprite;
+    private bool faceRightState = true;
     private Rigidbody2D marioBody;
 
     // Start is called before the first frame update
@@ -16,13 +18,23 @@ public class PlayerMovement : MonoBehaviour
         // Set to be 30 FPS
         Application.targetFrameRate = 30;
         marioBody = GetComponent<Rigidbody2D>();
-
+        marioSprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown("a") && faceRightState)
+        {
+            faceRightState = false;
+            marioSprite.flipX = true;
+        }
 
+        if (Input.GetKeyDown("d") && !faceRightState)
+        {
+            faceRightState = true;
+            marioSprite.flipX = false;
+        }
     }
 
     // FixedUpdate is called 50 times a second
@@ -54,6 +66,17 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Ground")) onGroundState = true;
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            // Loop through all contact points in this collision
+            foreach (ContactPoint2D contact in col.contacts)
+            {
+                // A normal pointing up (0,1) means you hit the top surface
+                if (contact.normal.y > 0.5f) // adjust threshold if needed
+                {
+                    onGroundState = true;
+                }
+            }
+        }
     }
 }
