@@ -80,7 +80,7 @@ public class EnemyMovement : MonoBehaviour
                     GameManager.Instance.AddScore(100);
 
                     // Make player bounce
-                    float bounceForce = 10f;
+                    float bounceForce = 20f;
                     Rigidbody2D rb = col.gameObject.GetComponent<Rigidbody2D>();
                     rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce); // adjust bounce
 
