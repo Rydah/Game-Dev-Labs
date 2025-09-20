@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 10;
-    public float maxSpeed = 20;
-    public float upSpeed = 10;
+    public float maxSpeed = 8f;
+    public float acceleration = 30f;
+    public float maxAccelForce = 100f;
+    public float upSpeed = 15f;
+
     private bool onGroundState = true;
     private SpriteRenderer marioSprite;
     private bool faceRightState = true;
@@ -37,35 +39,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // FixedUpdate is called 50 times a second
     void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveInput = Input.GetAxisRaw("Horizontal");
+        float targetSpeed = moveInput * maxSpeed;   // desired speed
+        float speedDiff = targetSpeed - marioBody.linearVelocity.x;
 
-        if (Mathf.Abs(moveHorizontal) > 0)
+        if (moveInput != 0)
         {
-            Vector2 movement = new Vector2(moveHorizontal, 0);
-            // check if it doesn't go beyond maxSpeed
-            if (marioBody.linearVelocity.magnitude < maxSpeed)
-                marioBody.AddForce(movement * speed);
+            // If input direction is opposite current velocity, give stronger acceleration
+            float accelRate = (Mathf.Sign(targetSpeed) != Mathf.Sign(marioBody.linearVelocity.x))
+                ? acceleration * 2f    // faster turn-around
+                : acceleration;        // normal accel
+
+            // Apply force
+            float movement = Mathf.Clamp(speedDiff * accelRate, -maxAccelForce, maxAccelForce);
+            marioBody.AddForce(Vector2.right * movement);
+        }
+        else
+        {
+            // Instant stop
+            marioBody.linearVelocity = new Vector2(0, marioBody.linearVelocity.y);
         }
 
-        // stop
-        if (Input.GetKeyUp("a") || Input.GetKeyUp("d"))
+        // Jump
+        if (Input.GetKeyDown(KeyCode.Space) && onGroundState)
         {
-            // stop
-            if (Input.GetKeyUp("a") || Input.GetKeyUp("d"))
-            {
-                var v = marioBody.linearVelocity;
-                v.x = 0;
-                marioBody.linearVelocity = v;
-            }
-
-        }
-
-        if (Input.GetKeyDown("space") && onGroundState)
-        {
-            marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
+            marioBody.linearVelocity = new Vector2(marioBody.linearVelocity.x, upSpeed);
             onGroundState = false;
         }
     }

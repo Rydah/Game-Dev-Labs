@@ -19,7 +19,7 @@ public class CameraFollow : MonoBehaviour
 
         // Clamp X and Y to level bounds
         float clampedX = Mathf.Clamp(desiredPosition.x, minX, maxX);
-        float clampedY = Mathf.Clamp(desiredPosition.y, minY, maxY);
+        float clampedY = Mathf.Clamp(desiredPosition.y + 5, minY, maxY);
 
         Vector3 clampedPosition = new Vector3(clampedX, clampedY, transform.position.z);
 
