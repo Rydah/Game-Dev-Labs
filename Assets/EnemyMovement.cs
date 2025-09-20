@@ -52,7 +52,7 @@ public class EnemyMovement : MonoBehaviour
             foreach (ContactPoint2D contact in col.contacts)
             {
                 // Player landed from above
-                if (contact.normal.y < -0.5f)
+                if (contact.normal.y < -0.3f)
                 {
                     GameManager.Instance.AddScore(100);
 
@@ -67,7 +67,6 @@ public class EnemyMovement : MonoBehaviour
                 else
                 {
                     GameManager.Instance.ShowGameOverScreen();
-                    Debug.Log("YOU DIED");
                     break;
                 }
             }
