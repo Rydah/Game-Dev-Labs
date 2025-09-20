@@ -20,13 +20,36 @@ public class EnemyMovement : MonoBehaviour
         originalX = transform.position.x;
         ComputeVelocity();
     }
+
     void ComputeVelocity()
     {
         velocity = new Vector2(moveRight * maxOffset / enemyPatroltime, 0);
     }
+
     void Movegoomba()
     {
-        enemyBody.MovePosition(enemyBody.position + velocity * Time.fixedDeltaTime);
+        Vector2 direction = new Vector2(moveRight, 0);
+
+        // Half-width of the collider
+        float halfWidth = GetComponent<Collider2D>().bounds.extents.x;
+
+        // Start ray from the front edge
+        Vector2 rayOrigin = (Vector2)transform.position + direction * halfWidth;
+
+        // Slightly longer than 0.1, to be safe
+        float rayDistance = 0.1f;
+
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, direction, rayDistance, LayerMask.GetMask("Foreground"));
+
+        if (hit.collider != null)
+        {
+            moveRight *= -1;
+            ComputeVelocity();
+        }
+        else
+        {
+            enemyBody.MovePosition(enemyBody.position + velocity * Time.fixedDeltaTime);
+        }
     }
 
     // note that this is Update(), which still works but not ideal. See below.
