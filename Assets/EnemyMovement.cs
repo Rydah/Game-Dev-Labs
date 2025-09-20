@@ -72,26 +72,32 @@ public class EnemyMovement : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
+            bool stomped = false;
+
             foreach (ContactPoint2D contact in col.contacts)
             {
-                // Player landed from above
                 if (contact.normal.y < -0.3f)
                 {
-                    GameManager.Instance.AddScore(100);
-
-                    // Make player bounce
-                    float bounceForce = 20f;
-                    Rigidbody2D rb = col.gameObject.GetComponent<Rigidbody2D>();
-                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce); // adjust bounce
-
-                    Destroy(gameObject); // enemy dies
-                    break;
+                    stomped = true;
+                    break; // at least one top contact
                 }
-                else
-                {
-                    GameManager.Instance.ShowGameOverScreen();
-                    break;
-                }
+            }
+
+            if (stomped)
+            {
+                GameManager.Instance.AddScore(100);
+
+                // Make player bounce
+                float bounceForce = 20f;
+                Rigidbody2D rb = col.gameObject.GetComponent<Rigidbody2D>();
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
+
+                Destroy(gameObject);
+            }
+            else
+            {
+                // No top contact �� Mario dies
+                GameManager.Instance.ShowGameOverScreen();
             }
         }
     }
