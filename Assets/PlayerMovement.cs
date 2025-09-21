@@ -8,12 +8,24 @@ public class PlayerMovement : MonoBehaviour
     public float acceleration = 30f;
     public float maxAccelForce = 100f;
     public float upSpeed = 15f;
+    public float stompInvincibilityTime = 0.3f;
 
     private bool onGroundState = false;
-    private SpriteRenderer marioSprite;
     private bool faceRightState = true;
+    private bool isInvincible = false;
+    public bool isDead = false;
+
     private Rigidbody2D marioBody;
     public Animator marioAnimator;
+    private SpriteRenderer marioSprite;
+
+    public AudioSource audioSource;
+    public AudioClip jumpClip;
+    public AudioClip coinClip;
+    public AudioClip powerUpClip;
+    public AudioClip deathClip;
+    public AudioClip themeClip;
+    public AudioClip stompClip;
 
     // Start is called before the first frame update
     void Start()
@@ -23,11 +35,15 @@ public class PlayerMovement : MonoBehaviour
         marioBody = GetComponent<Rigidbody2D>();
         marioSprite = GetComponent<SpriteRenderer>();
         marioAnimator.SetBool("onGround", onGroundState);
+
+        audioSource.PlayOneShot(themeClip);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isDead) return;
+
         if (Input.GetKeyDown("a") && faceRightState)
         {
             faceRightState = false;
@@ -53,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return;
+
         float moveInput = Input.GetAxisRaw("Horizontal");
         float targetSpeed = moveInput * maxSpeed;   // desired speed
         float speedDiff = targetSpeed - marioBody.linearVelocity.x;
@@ -80,6 +98,8 @@ public class PlayerMovement : MonoBehaviour
             marioBody.linearVelocity = new Vector2(marioBody.linearVelocity.x, upSpeed);
             onGroundState = false;
             marioAnimator.SetBool("onGround", onGroundState);
+
+            audioSource.PlayOneShot(jumpClip);
         }
     }
 
@@ -96,6 +116,94 @@ public class PlayerMovement : MonoBehaviour
                     onGroundState = true;
                     marioAnimator.SetBool("onGround", onGroundState);
                 }
+            }
+        }
+
+        if (col.gameObject.CompareTag("Enemy"))
+        {
+            bool stomped = false;
+
+            foreach (ContactPoint2D contact in col.contacts)
+            {
+                if (contact.normal.y > 0) // top contact
+                {
+                    stomped = true;
+                    break;
+                }
+            }
+
+            if (stomped)
+            {
+                // Score
+                GameManager.Instance.AddScore(100);
+
+                // Bounce
+                marioBody.linearVelocity = new Vector2(marioBody.linearVelocity.x, upSpeed);
+
+                // Play stomp sound
+                audioSource.PlayOneShot(stompClip);
+
+                // Destroy enemy
+                Destroy(col.gameObject);
+
+                // Start brief invincibility
+                StartCoroutine(StompIFrame());
+            }
+            else if (!isInvincible)
+            {
+                // Player hit from side ¡æ game over
+                isDead = true;
+                marioAnimator.SetBool("onDeath", isDead);
+
+                audioSource.Stop();
+                //StopAllEnemies();
+
+                audioSource.PlayOneShot(deathClip);
+                marioBody.linearVelocity = new Vector2(-15f, 30f);
+                Collider2D col2D = GetComponent<Collider2D>();
+                col2D.enabled = false;
+
+                StartCoroutine(WaitForDeathSound());
+            }
+        }
+    }
+
+    IEnumerator WaitForDeathSound()
+    {
+        // Wait for the length of the clip
+        yield return new WaitForSeconds(deathClip.length);
+
+        // Show game over screen
+        GameManager.Instance.ShowGameOverScreen();
+    }
+
+    IEnumerator StompIFrame()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(stompInvincibilityTime);
+        isInvincible = false;
+    }
+
+    private void StopAllEnemies()
+    {
+        // Find all GameObjects with tag "Enemy"
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        foreach (GameObject enemy in enemies)
+        {
+            // Disable their movement script
+            EnemyMovement movement = enemy.GetComponent<EnemyMovement>();
+            if (movement != null)
+            {
+                movement.enabled = false;
+            }
+
+            // Optional: also freeze their Rigidbody2D
+            Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.bodyType = RigidbodyType2D.Kinematic; // prevent physics movement
             }
         }
     }

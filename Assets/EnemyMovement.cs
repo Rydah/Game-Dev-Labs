@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -65,40 +66,6 @@ public class EnemyMovement : MonoBehaviour
             moveRight *= -1;
             ComputeVelocity();
             Movegoomba();
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            bool stomped = false;
-
-            foreach (ContactPoint2D contact in col.contacts)
-            {
-                if (contact.normal.y < -0.3f)
-                {
-                    stomped = true;
-                    break; // at least one top contact
-                }
-            }
-
-            if (stomped)
-            {
-                GameManager.Instance.AddScore(100);
-
-                // Make player bounce
-                float bounceForce = 20f;
-                Rigidbody2D rb = col.gameObject.GetComponent<Rigidbody2D>();
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
-
-                Destroy(gameObject);
-            }
-            else
-            {
-                // No top contact �� Mario dies
-                GameManager.Instance.ShowGameOverScreen();
-            }
         }
     }
 }
