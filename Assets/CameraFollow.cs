@@ -1,29 +1,42 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
     public Transform player; // assign Player in Inspector
     public float smoothSpeed = 0.125f; // lower = smoother
-    public Vector3 offset; // optional offset from player
 
-    [Header("Clamp Boundaries")]
-    public float minX, maxX;
-    public float minY, maxY;
+    public Transform startLimit; // GameObject that indicates end of map
+    public Transform endLimit; // GameObject that indicates end of map
+    private float offset; // initial x-offset between camera and Mario
+    private float startX; // smallest x-coordinate of the Camera
+    private float endX; // largest x-coordinate of the camera
+    private float viewportHalfWidth;
 
-    void LateUpdate()
+    private PlayerMovement playerMovement; // reference to PlayerMovement script
+
+    void Start()
     {
-        if (player == null) return;
+        Vector3 bottomLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0)); // the z-component is the distance of the resulting plane from the camera 
+        viewportHalfWidth = Mathf.Abs(bottomLeft.x - this.transform.position.x);
+        offset = this.transform.position.x - player.position.x;
+        startX = this.transform.position.x;
+        endX = endLimit.transform.position.x - viewportHalfWidth;
 
-        // Desired camera position
-        Vector3 desiredPosition = player.position + offset;
+        if (player != null)
+        {
+            playerMovement = player.GetComponent<PlayerMovement>();
+        }
+    }
+    void Update()
+    {
+        // Stop camera if player is dead
+        if (playerMovement != null && playerMovement.isDead) return;
 
-        // Clamp X and Y to level bounds
-        float clampedX = Mathf.Clamp(desiredPosition.x, minX, maxX);
-        float clampedY = Mathf.Clamp(desiredPosition.y + 5, minY, maxY);
-
-        Vector3 clampedPosition = new Vector3(clampedX, clampedY, transform.position.z);
-
-        // Smooth follow
-        transform.position = Vector3.Lerp(transform.position, clampedPosition, smoothSpeed);
+        float desiredX = player.position.x + offset;
+        // check if desiredX is within startX and endX
+        if (desiredX > startX && desiredX < endX)
+            this.transform.position = new Vector3(desiredX, this.transform.position.y, this.transform.position.z);
     }
 }
