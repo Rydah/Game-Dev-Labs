@@ -9,10 +9,11 @@ public class PlayerMovement : MonoBehaviour
     public float maxAccelForce = 100f;
     public float upSpeed = 15f;
 
-    private bool onGroundState = true;
+    private bool onGroundState = false;
     private SpriteRenderer marioSprite;
     private bool faceRightState = true;
     private Rigidbody2D marioBody;
+    public Animator marioAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
         Application.targetFrameRate = 30;
         marioBody = GetComponent<Rigidbody2D>();
         marioSprite = GetComponent<SpriteRenderer>();
+        marioAnimator.SetBool("onGround", onGroundState);
     }
 
     // Update is called once per frame
@@ -36,6 +38,16 @@ public class PlayerMovement : MonoBehaviour
         {
             faceRightState = true;
             marioSprite.flipX = false;
+        }
+        
+        marioAnimator.SetFloat("xSpeed", Mathf.Abs(marioBody.linearVelocity.x));
+
+        if (onGroundState && marioAnimator.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+        {
+            if (Mathf.Abs(marioBody.linearVelocity.x) > 0.1f)
+                marioAnimator.Play("Run");
+            else
+                marioAnimator.Play("Idle");
         }
     }
 
@@ -67,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
         {
             marioBody.linearVelocity = new Vector2(marioBody.linearVelocity.x, upSpeed);
             onGroundState = false;
+            marioAnimator.SetBool("onGround", onGroundState);
         }
     }
 
@@ -81,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
                 if (contact.normal.y > 0.5f) // adjust threshold if needed
                 {
                     onGroundState = true;
+                    marioAnimator.SetBool("onGround", onGroundState);
                 }
             }
         }
