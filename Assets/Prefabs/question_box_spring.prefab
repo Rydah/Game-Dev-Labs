@@ -73,6 +73,8 @@ GameObject:
   - component: {fileID: 776057798294915242}
   - component: {fileID: 3403246359130007872}
   - component: {fileID: 2313074527387498572}
+  - component: {fileID: 637769060591087985}
+  - component: {fileID: 1765383353754139716}
   m_Layer: 6
   m_Name: question_block (2)
   m_TagString: Ground
@@ -211,7 +213,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -230,7 +232,7 @@ SpringJoint2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8882606077916012738}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_EnableCollision: 0
   m_ConnectedRigidBody: {fileID: 6811099458686239663}
@@ -243,4 +245,39 @@ SpringJoint2D:
   m_AutoConfigureDistance: 0
   m_Distance: 5
   m_DampingRatio: 0.1
-  m_Frequency: 5
+  m_Frequency: 3
+--- !u!114 &637769060591087985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8882606077916012738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69de1a6b9c8550c4f8429b9397ce08c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockAnimator: {fileID: 1765383353754139716}
+--- !u!95 &1765383353754139716
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8882606077916012738}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2fe47425f95a0194184eb9940c0692b3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
