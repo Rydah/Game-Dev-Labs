@@ -7,7 +7,11 @@ public class BlockBounce : MonoBehaviour
     private Rigidbody2D rb;
     private Vector3 startLocalPos;
     private bool isBouncing = false;
+    private bool isDisabled = false;
+
     public Animator blockAnimator;
+
+    [SerializeField] private GameObject coinPrefab;
 
     void Start()
     {
@@ -23,7 +27,7 @@ public class BlockBounce : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (isBouncing) return; // block further triggers while bouncing
+        if (isBouncing || isDisabled) return; // block further triggers while bouncing
 
         if (col.gameObject.CompareTag("Player"))
         {
@@ -45,9 +49,16 @@ public class BlockBounce : MonoBehaviour
         isBouncing = true;
         blockAnimator.SetBool("isBounce", isBouncing);
 
+        GameManager.Instance.AddScore(500);
+
         rb.bodyType = RigidbodyType2D.Dynamic;
         spring.enabled = true;
         rb.AddForce(Vector2.up * 10f, ForceMode2D.Impulse);
+
+        if (coinPrefab != null)
+        {
+            Instantiate(coinPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+        }
 
         yield return new WaitForSeconds(0.5f);
 
@@ -59,5 +70,11 @@ public class BlockBounce : MonoBehaviour
 
         isBouncing = false;
         blockAnimator.SetBool("isBounce", isBouncing);
+
+        if (Random.value < 0.2f)
+        {
+            isDisabled = true;
+            blockAnimator.SetBool("isDisabled", true); // drive animation change
+        }
     }
 }

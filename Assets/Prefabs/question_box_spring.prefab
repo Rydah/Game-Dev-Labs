@@ -259,6 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockAnimator: {fileID: 1765383353754139716}
+  coinPrefab: {fileID: 7328393006868357330, guid: 7ac9528a5f3af8a4ca065e0b3459b915, type: 3}
 --- !u!95 &1765383353754139716
 Animator:
   serializedVersion: 7
