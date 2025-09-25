@@ -37,7 +37,7 @@ public class CameraFollow : MonoBehaviour
         float desiredX = player.position.x + offset;
         desiredX = Mathf.Clamp(desiredX, startX, endX); 
 
-        float desiredY = player.position.y;
+        float desiredY = player.position.y + 5;
 
         Vector3 desiredPosition = new Vector3(desiredX, desiredY, transform.position.z);
         transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
