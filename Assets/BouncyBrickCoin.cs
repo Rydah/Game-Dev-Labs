@@ -12,6 +12,7 @@ public class BouncyBrickCoin : MonoBehaviour
     public Animator blockAnimator;
 
     [SerializeField] private GameObject coinPrefab;
+    [SerializeField] private GameObject goombaPrefab;
     [SerializeField] private bool spawnCoin;
 
     void Start()
@@ -57,6 +58,14 @@ public class BouncyBrickCoin : MonoBehaviour
         {
             GameManager.Instance.AddScore(500);
             Instantiate(coinPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+        }
+
+        if (coinPrefab != null && spawnCoin)
+        {
+            if (Random.value < 0.1f)
+            {
+                Instantiate(goombaPrefab, transform.position + Vector3.down * 0.5f, Quaternion.identity);
+            }
         }
 
         yield return new WaitForSeconds(0.5f);

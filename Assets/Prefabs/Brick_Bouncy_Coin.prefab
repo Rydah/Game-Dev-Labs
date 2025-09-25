@@ -198,4 +198,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockAnimator: {fileID: 0}
   coinPrefab: {fileID: 7328393006868357330, guid: 7ac9528a5f3af8a4ca065e0b3459b915, type: 3}
+  goombaPrefab: {fileID: 8684858930424322300, guid: f90dcbc22a8e3e643a4697dd10d68032, type: 3}
   spawnCoin: 1
