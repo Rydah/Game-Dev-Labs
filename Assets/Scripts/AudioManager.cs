@@ -45,7 +45,7 @@ public class AudioManager : MonoBehaviour
 
     // Convenience hooks for UnityEvents / buttons:
     public void PlayDeathTheme() => PlayBGM(deathTheme, true);
-    public void PlayBigPoop() => PlaySFX(bigPoop);
+
     public void PlayLevelTheme() => PlayBGM(levelTheme, true);
 
     // --- SFX (simple, 2D) ---
@@ -61,6 +61,7 @@ public class AudioManager : MonoBehaviour
     public void PlayEnemyHit() => PlaySFX(enemyHit);
     public void PlayPickup() => PlaySFX(pickup);
     public void PlayEnMingTalk() => PlaySFX(enMingTalking);
+    public void PlayBigPoop() => PlaySFX(bigPoop);
 
     // --- Mixer sliders (0..1 linear) ---
     public void SetBGMVolume(float v) => SetDb(bgmParam, v);

@@ -6100,6 +6100,7 @@ MonoBehaviour:
   shoot: {fileID: 8300000, guid: 34ee20a8832a44d5da5bdb023c32804b, type: 3}
   enemyHit: {fileID: 8300000, guid: 77aeaec5f43f04ff08d53084f20e9c03, type: 3}
   pickup: {fileID: 0}
+  bigPoop: {fileID: 8300000, guid: 5086a8122ce48244fb1ee273d5425227, type: 3}
   enMingTalking: {fileID: 8300000, guid: c50ad9003d0a5c60daa96a648e95afd1, type: 3}
 --- !u!4 &2131336664
 Transform:
