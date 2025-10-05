@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+
     public GameObject goombaPrefab; // assign prefab in Inspector
     public float spawnInterval = 3f; // seconds between spawns
     public int maxEnemies = 5;

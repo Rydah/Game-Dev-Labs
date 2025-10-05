@@ -10,6 +10,8 @@ public class CameraFollow : MonoBehaviour
     public float minX, maxX;
     public float minY, maxY;
 
+
+
     void LateUpdate()
     {
         if (player == null) return;

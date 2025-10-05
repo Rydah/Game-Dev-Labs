@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void PlayerMovementEvent();
+
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovementEvent PlayerJumpEvent;
     public float maxSpeed = 8f;
     public float acceleration = 30f;
     public float maxAccelForce = 100f;
     public float upSpeed = 15f;
+
+
 
     private bool onGroundState = true;
     private SpriteRenderer marioSprite;
@@ -21,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
         Application.targetFrameRate = 30;
         marioBody = GetComponent<Rigidbody2D>();
         marioSprite = GetComponent<SpriteRenderer>();
+        GoombaDieManager.goombaDieEvent += makeMarioBigger;
     }
 
     // Update is called once per frame
@@ -65,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
         // Jump
         if (Input.GetKeyDown(KeyCode.Space) && onGroundState)
         {
+            PlayerJumpEvent.Invoke();
             marioBody.linearVelocity = new Vector2(marioBody.linearVelocity.x, upSpeed);
             onGroundState = false;
         }
@@ -84,5 +91,10 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void makeMarioBigger()
+    {
+        this.transform.localScale *= 1.3f;
     }
 }
