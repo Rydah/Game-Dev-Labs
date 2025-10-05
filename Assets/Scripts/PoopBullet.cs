@@ -25,7 +25,7 @@ public class PoopBullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-
+            Debug.Log("Hit enemy");
             GoombaDieManager.goombaDieEvent.Invoke();
             Destroy(collision.gameObject);
         }

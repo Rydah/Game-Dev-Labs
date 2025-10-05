@@ -29,6 +29,17 @@ public class PlayerMovement : MonoBehaviour
         GoombaDieManager.goombaDieEvent += makeMarioBigger;
     }
 
+    void OnEnable() {
+    GoombaDieManager.goombaDieEvent += makeMarioBigger;
+}
+
+void OnDisable() {
+    GoombaDieManager.goombaDieEvent -= makeMarioBigger;
+}
+void OnDestroy() {
+    GoombaDieManager.goombaDieEvent -= makeMarioBigger;
+}
+
     // Update is called once per frame
     void Update()
     {
@@ -95,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void makeMarioBigger()
     {
+        Debug.Log("Make marrio bigger");
         this.transform.localScale *= 1.3f;
     }
 }

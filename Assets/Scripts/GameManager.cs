@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         GameOverCanvas.gameObject.SetActive(false);
+
+        foreach (var bullet in FindObjectsOfType<PoopBullet>()) {
+        Destroy(bullet.gameObject);
+    }   GoombaDieManager.goombaDieEvent = null;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
