@@ -22,7 +22,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip shoot;
     public AudioClip enemyHit;
     public AudioClip pickup;
+    public AudioClip bigPoop;
 
+    public AudioClip enMingTalking;
     void Awake()
     {
         if (I != null) { Destroy(gameObject); return; }
@@ -43,6 +45,7 @@ public class AudioManager : MonoBehaviour
 
     // Convenience hooks for UnityEvents / buttons:
     public void PlayDeathTheme() => PlayBGM(deathTheme, true);
+    public void PlayBigPoop() => PlaySFX(bigPoop);
     public void PlayLevelTheme() => PlayBGM(levelTheme, true);
 
     // --- SFX (simple, 2D) ---
@@ -57,6 +60,7 @@ public class AudioManager : MonoBehaviour
     public void PlayShoot() => PlaySFX(shoot);
     public void PlayEnemyHit() => PlaySFX(enemyHit);
     public void PlayPickup() => PlaySFX(pickup);
+    public void PlayEnMingTalk() => PlaySFX(enMingTalking);
 
     // --- Mixer sliders (0..1 linear) ---
     public void SetBGMVolume(float v) => SetDb(bgmParam, v);
@@ -75,6 +79,7 @@ public class AudioManager : MonoBehaviour
         PlayLevelTheme();
         GoombaDieManager.goombaDieEvent += PlayEnemyHit;
         GoombaDieManager.goombaDieEvent += pitchShiftOnGoombaDie;
+        GoombaDieManager.goombaDieEvent += PlayBigPoop;
         PlayerMovement.PlayerJumpEvent += PlayJump;
         PoopGun.PoopGunShoot += PlayShoot;
     }

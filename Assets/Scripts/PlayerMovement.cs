@@ -29,16 +29,19 @@ public class PlayerMovement : MonoBehaviour
         GoombaDieManager.goombaDieEvent += makeMarioBigger;
     }
 
-    void OnEnable() {
-    GoombaDieManager.goombaDieEvent += makeMarioBigger;
-}
+    void OnEnable()
+    {
+        GoombaDieManager.goombaDieEvent += makeMarioBigger;
+    }
 
-void OnDisable() {
-    GoombaDieManager.goombaDieEvent -= makeMarioBigger;
-}
-void OnDestroy() {
-    GoombaDieManager.goombaDieEvent -= makeMarioBigger;
-}
+    void OnDisable()
+    {
+        GoombaDieManager.goombaDieEvent -= makeMarioBigger;
+    }
+    void OnDestroy()
+    {
+        GoombaDieManager.goombaDieEvent -= makeMarioBigger;
+    }
 
     // Update is called once per frame
     void Update()
